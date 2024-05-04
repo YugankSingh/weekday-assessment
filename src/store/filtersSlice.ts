@@ -4,19 +4,19 @@ interface InitialFitlersState {
 	roles: string[]
 	minPayInLPA: number
 	maximumMinExperience: number
-	companyName: ""
+	companyName: string
 	location: string[]
 	workEnvironment: "remote" | "in-office" | "any"
 	minBasePay: number
 }
 
-const initialFiltersState = {
+const initialFiltersState: InitialFitlersState = {
 	roles: [],
 	minPayInLPA: 0,
 	maximumMinExperience: Infinity,
-	comapanyName: null,
+	companyName: "",
 	location: [],
-	workEnv: "any",
+	workEnvironment: "any",
 	minBasePay: 0,
 }
 
