@@ -1,11 +1,12 @@
 import React from "react"
 import "./App.css"
-import JobsList from "./components/JobsList"
+import JobsList from "./components/JobList"
+import JobFiltersList from "./components/JobFiltersList"
 
 function App() {
 	return (
 		<div className="App">
-			App
+			<JobFiltersList />
 			<JobsList />
 		</div>
 	)
