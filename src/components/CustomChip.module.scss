@@ -1,0 +1,38 @@
+.wrapper {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	row-gap: 3px;
+	color: rgb(51, 51, 51);
+	background-color: rgb(230, 230, 230);
+	padding: 0;
+	justify-content: center;
+	align-items: center;
+	border-radius: 2px;
+	height: 22px;
+
+	& > p {
+		font-size: 12px;
+		padding: 0 3px 0 6px;
+		margin: 0;
+	}
+	& > button {
+		all: unset;
+		border-radius: 2px;
+
+		cursor: pointer;
+		display: flex;
+		height: 22px;
+		width: 22px;
+		justify-content: center;
+		align-items: center;
+		&:hover {
+			background-color: rgb(255, 189, 173);
+			color: rgb(222, 53, 11);
+		}
+		& > img {
+			height: 14px;
+			width: 14px;
+		}
+	}
+}

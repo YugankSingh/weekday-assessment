@@ -1,15 +1,38 @@
-import React from "react"
-import FilterSelect from "./FilterSelect"
+import React, { useState } from "react"
+import FilterMultiSelect from "./FilterMultiSelect"
+import FormControl from "@mui/material/FormControl"
 
 function JobFiltersList({}) {
+	const [selectedRoles, setSelectedRoles] = useState<string[]>([])
+
+	const jobRoleValues = [
+		"First",
+		"Second",
+		"Third",
+		"Fourth",
+		"Fairst",
+		"wrtgs",
+		"Thiasrd",
+		"Fousrth",
+		"Firsast",
+		"Secsdond",
+		"Thisrd",
+		"Foaurth",
+		"Firast",
+		"Secrond",
+		"Tharird",
+		"Fouarrth",
+	]
+
 	return (
 		<div>
-			<FilterSelect
-				isGrouped
-				isMultiSelect
-				onAdd={value => console.log("added the value", value)}
-				onRemove={value => console.log("removed the value", value)}
-				groupedValues={{}}
+			<FilterMultiSelect
+				setValues={values => {
+					setSelectedRoles(values)
+				}}
+				placeholder="Role"
+				selectedValues={selectedRoles}
+				values={jobRoleValues}
 			/>
 		</div>
 	)

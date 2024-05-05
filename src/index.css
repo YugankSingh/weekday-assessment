@@ -14,3 +14,11 @@ code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
 		monospace;
 }
+
+.MuiInputBase-root{
+	padding: 8px !important;
+}
+
+.MuiAutocomplete-endAdornment{
+	/* display: none; */
+}
