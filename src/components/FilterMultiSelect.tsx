@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useRef, useState } from "react"
 import { jobFilterGroupedValues } from "../types"
 import Box from "@mui/material/Box"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
@@ -16,9 +16,11 @@ interface FilterMultiSelectProp {
 	values?: string[]
 	groupedValues?: jobFilterGroupedValues
 	minCharacter?: number
+	isMultiple: boolean
 }
 
 function FilterMultiSelect({
+	isMultiple,
 	isGrouped = false,
 	placeholder,
 	setValues,
@@ -35,7 +37,6 @@ function FilterMultiSelect({
 			)
 		values = []
 		for (let group in groupedValues) {
-			console.log("group is", group)
 			const currGroupValues = groupedValues[group]
 			currGroupValues.forEach(value => {
 				values?.push(value)
@@ -52,14 +53,12 @@ function FilterMultiSelect({
 		setValues(selectedValues.filter(currValue => currValue !== value))
 	}
 
-	const selectedValuesMemo = React.useMemo(
-		() => selectedValues?.filter(v => true),
-		[selectedValues]
-	)
-	const valuesNotSelected = React.useMemo(
-		() => values?.filter(v => !selectedValues.includes(v)),
-		[selectedValues, values]
-	)
+	console.log(placeholder, "selectedValues", selectedValues, isMultiple)
+	const valuesToShow = React.useMemo(() => {
+		return isMultiple
+			? values?.filter(v => !selectedValues.includes(v))
+			: values
+	}, [selectedValues, values])
 	const [open, setOpen] = useState(false)
 
 	const getBorderColor = (isHovering: boolean, isActive: boolean) => {
@@ -74,6 +73,7 @@ function FilterMultiSelect({
 	const [parentId] = useState(
 		"parent-id" + Math.floor(Math.random() * 1000000000)
 	)
+	const inputRef = useRef(null)
 
 	const handleClick = (e: any) => {
 		e.preventDefault()
@@ -91,11 +91,13 @@ function FilterMultiSelect({
 				shouldToggle = false
 			}
 		})
-
-		if (shouldToggle) setOpen(!open)
+		const newOpen = !open
+		if (!shouldToggle) return
+		setOpen(newOpen)
+		if (!newOpen)
+			// @ts-ignore
+			document.querySelectorAll(`#${parentId} input`).forEach(el => el.blur())
 	}
-
-	console.log(groups, values)
 
 	return (
 		<FormControl sx={{ m: 0, transition: "all 0.3s linear" }} id={parentId}>
@@ -114,13 +116,25 @@ function FilterMultiSelect({
 			)}
 			<Autocomplete
 				multiple
+				// getOptionLabel={(option) => option.title}
 				id="tags-standard"
 				value={selectedValues}
 				groupBy={value => groups[value]}
-				// getOptionLabel={(option) => option.title}
-				options={valuesNotSelected || []}
+				options={valuesToShow || []}
 				onChange={(event, newValue) => {
+					console.log(newValue)
+
+					if (!newValue) return
+					if (!isMultiple) newValue = [newValue[newValue.length - 1]]
 					setValues(newValue)
+				}}
+				onInputChange={e => {
+					// @ts-ignore
+					const inputValue: string = e?.target?.value || ""
+					console.log("inputValue", inputValue)
+					if (!isMultiple && inputValue && inputValue.length) {
+						// setValues([])
+					}
 				}}
 				open={open}
 				onClose={handleClick}
@@ -136,6 +150,7 @@ function FilterMultiSelect({
 							minWidth: `calc( 0px + ${minCharacter}ch )`,
 							cursor: "pointer",
 							border: `1px solid ${getBorderColor(false, open)}`,
+							borderRadius: "4px",
 							color: "#333333",
 							boxShadow: `${
 								open ? "rgb(38, 132, 255) 0px 0px 0px 1px" : "none"
@@ -152,29 +167,59 @@ function FilterMultiSelect({
 								gap: "5px",
 							}}
 						>
-							{selectedValuesMemo.map((option, index) => (
-								<CustomChip
-									className={removeItemClass}
-									key={index}
-									text={option}
-									onRemove={() => handleRemove(option)}
+							{!!isMultiple &&
+								selectedValues.map((option, index) => (
+									<CustomChip
+										className={removeItemClass}
+										key={index}
+										text={option}
+										onRemove={() => handleRemove(option)}
+									/>
+								))}
+
+							<Box>
+								{!isMultiple &&
+									selectedValues[0] &&
+									!params.inputProps.value?.toString().length && (
+										<Typography
+											sx={{
+												all: "unset",
+												height: "22px",
+												fontSize: "14px",
+												width: selectedValues.length
+													? `${(selectedValues.length || 0) * 1.3 || 2}ch`
+													: minCharacter + "ch",
+											}}
+										>
+											{selectedValues[0]}
+										</Typography>
+									)}
+
+								<input
+									style={{
+										all: "unset",
+										height: "22px",
+										fontSize: "14px",
+										// width: "10px",
+										// minWidth: "min-content"
+
+										width: selectedValues.length
+											? `${
+													(params.inputProps.value?.toString().length || 0) *
+														1.3 || 2
+											  }ch`
+											: minCharacter + "ch",
+									}}
+									type="text"
+									{...params.inputProps}
+									// onChange={e => {
+									// 	if (isMultiple && e.target.value) {
+									// 		setValues([])
+									// 	}
+									// }}
+									placeholder={selectedValues.length ? "" : placeholder}
 								/>
-							))}
-							<input
-								style={{
-									all: "unset",
-									height: "22px",
-									fontSize: "13px",
-									// width: "10px",
-									// minWidth: "min-content"
-									width: selectedValues.length
-										? `${params.inputProps.value?.toString().length || 2}ch`
-										: minCharacter + "ch",
-								}}
-								type="text"
-								{...params.inputProps}
-								placeholder={selectedValues.length ? "" : placeholder}
-							/>
+							</Box>
 						</Box>
 
 						<Box
