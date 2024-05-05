@@ -3,7 +3,9 @@ import FilterMultiSelect from "./FilterMultiSelect"
 import { useDispatch, useSelector } from "react-redux"
 import { useAppSelector } from "../hooks"
 import { setFilter } from "../store/filtersSlice"
-import { Box } from "@mui/material"
+import { Box, Typography } from "@mui/material"
+import { FormatColorReset } from "@mui/icons-material"
+import FilterInput from "./FilterInput"
 
 const workEnvironemntValues = ["Remote", "In-Office", "Hybrid"]
 const locationValues = [
@@ -131,6 +133,17 @@ const rolesValues = {
 		"Security Analyst",
 	],
 }
+const experienceValues = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+const minBasePayInLPAValues = [
+	"0L",
+	"10L",
+	"20L",
+	"30L",
+	"40L",
+	"50L",
+	"60L",
+	"70L",
+]
 
 function JobFiltersList({}) {
 	const filters = useAppSelector(state => state.filters.list)
@@ -141,12 +154,52 @@ function JobFiltersList({}) {
 			sx={{
 				display: "flex",
 				flexDirection: "row",
+				alignItems: "flex-end",
 				gap: "4px",
 				flexWrap: "wrap",
 				p: 3,
 			}}
 		>
 			<FilterMultiSelect
+				setValues={values => {
+					dispatch(
+						setFilter({
+							...filters,
+							// @ts-ignore
+							roles: values,
+						})
+					)
+				}}
+				isMultiple={true}
+				placeholder="Roles"
+				isGrouped
+				selectedValues={filters.roles}
+				groupedValues={rolesValues}
+				minCharacter={16}
+			/>
+
+			<FilterMultiSelect
+				setValues={values => {
+					const value = values[0] ? parseInt(values[0]) : null
+					dispatch(
+						setFilter({
+							...filters,
+							// @ts-ignore
+							minExperience: value,
+						})
+					)
+				}}
+				isMultiple={false}
+				placeholder="Experience"
+				selectedValues={
+					filters.minExperience === null ? [] : [filters.minExperience + ""]
+				}
+				values={experienceValues}
+				minCharacter={9}
+			/>
+
+			<FilterMultiSelect
+				isMultiple={true}
 				setValues={values => {
 					dispatch(
 						setFilter({
@@ -163,6 +216,7 @@ function JobFiltersList({}) {
 			/>
 
 			<FilterMultiSelect
+				isMultiple={true}
 				setValues={values => {
 					dispatch(setFilter({ ...filters, location: values }))
 				}}
@@ -173,6 +227,7 @@ function JobFiltersList({}) {
 			/>
 
 			<FilterMultiSelect
+				isMultiple={false}
 				setValues={values => {
 					dispatch(
 						setFilter({
@@ -190,19 +245,31 @@ function JobFiltersList({}) {
 
 			<FilterMultiSelect
 				setValues={values => {
+					const value = values[0] ? parseInt(values[0]) : null
 					dispatch(
 						setFilter({
 							...filters,
 							// @ts-ignore
-							roles: values,
+							minBasePayInLPA: value,
 						})
 					)
 				}}
-				placeholder="Roles"
-				isGrouped
-				selectedValues={filters.roles}
-				groupedValues={rolesValues}
-				minCharacter={20}
+				isMultiple={false}
+				placeholder="Min Base Pay"
+				selectedValues={
+					filters.minBasePayInLPA === null ? [] : [filters.minBasePayInLPA + ""]
+				}
+				values={minBasePayInLPAValues}
+				minCharacter={12}
+			/>
+
+			<FilterInput
+				setValue={value =>
+					dispatch(setFilter({ ...filters, companyName: value }))
+				}
+				placeholder={"Company Name"}
+				selectedValue={filters.companyName}
+				minCharacter={13}
 			/>
 		</Box>
 	)

@@ -212,11 +212,6 @@ function FilterMultiSelect({
 									}}
 									type="text"
 									{...params.inputProps}
-									// onChange={e => {
-									// 	if (isMultiple && e.target.value) {
-									// 		setValues([])
-									// 	}
-									// }}
 									placeholder={selectedValues.length ? "" : placeholder}
 								/>
 							</Box>
