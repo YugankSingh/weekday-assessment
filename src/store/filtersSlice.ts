@@ -2,12 +2,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 export interface Filters {
 	roles: string[]
-	minPayInLPA: number
+	techStack: string[]
 	maximumMinExperience: number
 	companyName: string
 	location: string[]
 	workEnvironment: ("Hybrid" | "In-Office" | "Remote")[]
-	minBasePay: number
+	minBasePayInLPA: number
 }
 
 export interface FiltersState {
@@ -16,13 +16,13 @@ export interface FiltersState {
 
 const initialFiltersState: FiltersState = {
 	list: {
-		roles: [],
-		minPayInLPA: 0,
 		maximumMinExperience: Infinity,
 		companyName: "",
 		location: [],
 		workEnvironment: [],
-		minBasePay: 0,
+		techStack: [],
+		roles: [],
+		minBasePayInLPA: 0,
 	},
 }
 
