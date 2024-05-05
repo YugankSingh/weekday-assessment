@@ -1,15 +1,11 @@
 import React, { useState } from "react"
 import { jobFilterGroupedValues } from "../types"
 import Box from "@mui/material/Box"
-import InputBase from "@mui/material/InputBase"
-import InputAdornment from "@mui/material/InputAdornment"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
-import CloseIcon from "@mui/icons-material/Close"
 import CustomChip from "./CustomRemovableChip"
-import MenuItem from "@mui/material/MenuItem"
 import FormControl from "@mui/material/FormControl"
 import Autocomplete from "@mui/material/Autocomplete"
-import { OutlinedInput, TextField, Typography } from "@mui/material"
+import { Typography } from "@mui/material"
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded"
 
 interface FilterMultiSelectProp {

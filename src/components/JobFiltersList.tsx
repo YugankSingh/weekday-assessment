@@ -1,6 +1,5 @@
-import React, { useState } from "react"
+import  { useState } from "react"
 import FilterMultiSelect from "./FilterMultiSelect"
-import FormControl from "@mui/material/FormControl"
 
 function JobFiltersList({}) {
 	const [selectedRoles, setSelectedRoles] = useState<string[]>([])

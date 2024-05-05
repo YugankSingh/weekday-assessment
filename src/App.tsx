@@ -1,4 +1,3 @@
-import React from "react"
 import "./App.css"
 import JobsList from "./components/JobList"
 import JobFiltersList from "./components/JobFiltersList"
