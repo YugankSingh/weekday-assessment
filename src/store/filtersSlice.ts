@@ -1,32 +1,41 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-interface InitialFitlersState {
+export interface Filters {
 	roles: string[]
 	minPayInLPA: number
 	maximumMinExperience: number
 	companyName: string
 	location: string[]
-	workEnvironment: "remote" | "in-office" | "any"
+	workEnvironment: ("Hybrid" | "In-Office" | "Remote")[]
 	minBasePay: number
 }
 
-const initialFiltersState: InitialFitlersState = {
-	roles: [],
-	minPayInLPA: 0,
-	maximumMinExperience: Infinity,
-	companyName: "",
-	location: [],
-	workEnvironment: "any",
-	minBasePay: 0,
+export interface FiltersState {
+	list: Filters
+}
+
+const initialFiltersState: FiltersState = {
+	list: {
+		roles: [],
+		minPayInLPA: 0,
+		maximumMinExperience: Infinity,
+		companyName: "",
+		location: [],
+		workEnvironment: [],
+		minBasePay: 0,
+	},
 }
 
 const filtersSlice = createSlice({
 	name: "filters",
 	initialState: initialFiltersState,
 	reducers: {
-		addJobs: state => {},
+		setFilter: (state, action: PayloadAction<Filters>) => {
+			console.log(action.payload)
+			state.list = { ...state.list, ...action.payload }
+		},
 	},
 })
 
-export const {} = filtersSlice.actions
+export const { setFilter } = filtersSlice.actions
 export default filtersSlice.reducer

@@ -1,37 +1,31 @@
-import  { useState } from "react"
+import { useState } from "react"
 import FilterMultiSelect from "./FilterMultiSelect"
+import { useDispatch, useSelector } from "react-redux"
+import { useAppSelector } from "../hooks"
+import { setFilter } from "../store/filtersSlice"
+
+const workEnvironemnt = ["Remote", "In-Office", "Hybrid"]
 
 function JobFiltersList({}) {
-	const [selectedRoles, setSelectedRoles] = useState<string[]>([])
-
-	const jobRoleValues = [
-		"First",
-		"Second",
-		"Third",
-		"Fourth",
-		"Fairst",
-		"wrtgs",
-		"Thiasrd",
-		"Fousrth",
-		"Firsast",
-		"Secsdond",
-		"Thisrd",
-		"Foaurth",
-		"Firast",
-		"Secrond",
-		"Tharird",
-		"Fouarrth",
-	]
+	const filters = useAppSelector(state => state.filters.list)
+	const dispatch = useDispatch()
 
 	return (
 		<div>
 			<FilterMultiSelect
 				setValues={values => {
-					setSelectedRoles(values)
+					dispatch(
+						setFilter({
+							...filters,
+							// @ts-ignore
+							workEnvironment: values,
+						})
+					)
 				}}
-				placeholder="Role"
-				selectedValues={selectedRoles}
-				values={jobRoleValues}
+				placeholder="Work Environemnt"
+				selectedValues={filters.workEnvironment}
+				values={workEnvironemnt}
+				minCharacter={14}
 			/>
 		</div>
 	)
