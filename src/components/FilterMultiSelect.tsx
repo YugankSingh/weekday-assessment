@@ -13,7 +13,7 @@ interface FilterMultiSelectProp {
 	isGrouped?: boolean
 	setValues: (value: string[]) => any
 	selectedValues: string[]
-	values: string[]
+	values?: string[]
 	groupedValues?: jobFilterGroupedValues
 	minCharacter?: number
 }
@@ -27,10 +27,24 @@ function FilterMultiSelect({
 	selectedValues,
 	minCharacter = 30,
 }: FilterMultiSelectProp) {
-	if (!!isGrouped && !groupedValues)
-		throw new Error(
-			"groupedValues can't be null, when isGrouped flag is on, in FilterMultiSelect.tsx"
-		)
+	let groups: { [value: string]: string } = {}
+	if (isGrouped) {
+		if (!groupedValues)
+			throw new Error(
+				"groupedValues can't be null, when isGrouped flag is on, in FilterMultiSelect.tsx"
+			)
+		values = []
+		for (let group in groupedValues) {
+			console.log("group is", group)
+			const currGroupValues = groupedValues[group]
+			currGroupValues.forEach(value => {
+				values?.push(value)
+				groups[value] = group
+			})
+		}
+	}
+	values = values || []
+
 	if (!isGrouped && !values)
 		throw new Error("values can't be null, in FilterMultiSelect.tsx")
 
@@ -39,11 +53,11 @@ function FilterMultiSelect({
 	}
 
 	const selectedValuesMemo = React.useMemo(
-		() => selectedValues.filter(v => true),
+		() => selectedValues?.filter(v => true),
 		[selectedValues]
 	)
 	const valuesNotSelected = React.useMemo(
-		() => values.filter(v => !selectedValues.includes(v)),
+		() => values?.filter(v => !selectedValues.includes(v)),
 		[selectedValues, values]
 	)
 	const [open, setOpen] = useState(false)
@@ -81,24 +95,30 @@ function FilterMultiSelect({
 		if (shouldToggle) setOpen(!open)
 	}
 
+	console.log(groups, values)
+
 	return (
-		<FormControl sx={{ m: 1, transition: "all 0.3s linear" }} id={parentId}>
-			<Typography
-				sx={{
-					color: selectedValues.length ? "black" : "transparent",
-					fontSize: "14px",
-					margin: "6px 0",
-					marginBottom: 0,
-					fontWeight: "800",
-				}}
-			>
-				{selectedValues.length ? placeholder : "|"}
-			</Typography>
+		<FormControl sx={{ m: 0, transition: "all 0.3s linear" }} id={parentId}>
+			{!!selectedValues.length && (
+				<Typography
+					sx={{
+						color: selectedValues.length ? "black" : "transparent",
+						fontSize: "14px",
+						margin: "6px 0",
+						marginBottom: 0,
+						fontWeight: "800",
+					}}
+				>
+					{selectedValues.length ? placeholder : "|"}
+				</Typography>
+			)}
 			<Autocomplete
 				multiple
 				id="tags-standard"
 				value={selectedValues}
-				options={valuesNotSelected}
+				groupBy={value => groups[value]}
+				// getOptionLabel={(option) => option.title}
+				options={valuesNotSelected || []}
 				onChange={(event, newValue) => {
 					setValues(newValue)
 				}}
@@ -113,13 +133,13 @@ function FilterMultiSelect({
 							flexDirection: "row",
 							justifyContent: "space-between",
 							p: 1,
-							minWidth : `calc( 0px + ${minCharacter}ch )`,
+							minWidth: `calc( 0px + ${minCharacter}ch )`,
 							cursor: "pointer",
 							border: `1px solid ${getBorderColor(false, open)}`,
 							color: "#333333",
 							boxShadow: `${
 								open ? "rgb(38, 132, 255) 0px 0px 0px 1px" : "none"
-								}`,
+							}`,
 							"&:hover": {
 								border: `1px solid ${getBorderColor(true, open)}`,
 							},
@@ -149,7 +169,7 @@ function FilterMultiSelect({
 									// minWidth: "min-content"
 									width: selectedValues.length
 										? `${params.inputProps.value?.toString().length || 2}ch`
-										: minCharacter+"ch",
+										: minCharacter + "ch",
 								}}
 								type="text"
 								{...params.inputProps}
