@@ -3,11 +3,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 export interface Filters {
 	roles: string[]
 	techStack: string[]
-	maximumMinExperience: number
+	minExperience: number | null
 	companyName: string
 	location: string[]
 	workEnvironment: ("Hybrid" | "In-Office" | "Remote")[]
-	minBasePayInLPA: number
+	minBasePayInLPA: number | null
 }
 
 export interface FiltersState {
@@ -16,13 +16,13 @@ export interface FiltersState {
 
 const initialFiltersState: FiltersState = {
 	list: {
-		maximumMinExperience: Infinity,
+		minExperience: null,
 		companyName: "",
 		location: [],
 		workEnvironment: [],
 		techStack: [],
 		roles: [],
-		minBasePayInLPA: 0,
+		minBasePayInLPA: null,
 	},
 }
 
@@ -31,8 +31,8 @@ const filtersSlice = createSlice({
 	initialState: initialFiltersState,
 	reducers: {
 		setFilter: (state, action: PayloadAction<Filters>) => {
-			console.log(action.payload)
 			state.list = { ...state.list, ...action.payload }
+			console.log(state.list)
 		},
 	},
 })
