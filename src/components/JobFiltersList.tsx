@@ -1,7 +1,6 @@
 import { useState } from "react"
 import FilterMultiSelect from "./FilterMultiSelect"
-import { useDispatch, useSelector } from "react-redux"
-import { useAppSelector } from "../hooks"
+import { useAppDispatch, useAppSelector } from "../hooks"
 import { setFilter } from "../store/filtersSlice"
 import { Box, Typography } from "@mui/material"
 import { FormatColorReset } from "@mui/icons-material"
@@ -147,7 +146,7 @@ const minBasePayInLPAValues = [
 
 function JobFiltersList({}) {
 	const filters = useAppSelector(state => state.filters.list)
-	const dispatch = useDispatch()
+	const dispatch = useAppDispatch()
 
 	return (
 		<Box
@@ -157,7 +156,8 @@ function JobFiltersList({}) {
 				alignItems: "flex-end",
 				gap: "4px",
 				flexWrap: "wrap",
-				p: 3,
+				py: 3,
+				px: 0,
 			}}
 		>
 			<FilterMultiSelect

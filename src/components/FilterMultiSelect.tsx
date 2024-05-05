@@ -52,8 +52,6 @@ function FilterMultiSelect({
 	const handleRemove = (value: string) => {
 		setValues(selectedValues.filter(currValue => currValue !== value))
 	}
-
-	console.log(placeholder, "selectedValues", selectedValues, isMultiple)
 	const valuesToShow = React.useMemo(() => {
 		return isMultiple
 			? values?.filter(v => !selectedValues.includes(v))
@@ -122,8 +120,6 @@ function FilterMultiSelect({
 				groupBy={value => groups[value]}
 				options={valuesToShow || []}
 				onChange={(event, newValue) => {
-					console.log(newValue)
-
 					if (!newValue) return
 					if (!isMultiple) newValue = [newValue[newValue.length - 1]]
 					setValues(newValue)
@@ -131,7 +127,6 @@ function FilterMultiSelect({
 				onInputChange={e => {
 					// @ts-ignore
 					const inputValue: string = e?.target?.value || ""
-					console.log("inputValue", inputValue)
 					if (!isMultiple && inputValue && inputValue.length) {
 						// setValues([])
 					}
