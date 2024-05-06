@@ -1,20 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-
-export interface Filters {
-	roles: string[]
-	techStack: string[]
-	minExperience: number | null
-	companyName: string
-	location: string[]
-	workEnvironment: ("Hybrid" | "In-Office" | "Remote")[]
-	minBasePayInLPA: number | null
-}
+import { Filters } from "../types"
 
 export interface FiltersState {
 	list: Filters
 }
 
-const initialFiltersState: FiltersState = {
+export const initialFiltersState: FiltersState = {
 	list: {
 		minExperience: null,
 		companyName: "",
@@ -31,8 +22,10 @@ const filtersSlice = createSlice({
 	initialState: initialFiltersState,
 	reducers: {
 		setFilter: (state, action: PayloadAction<Filters>) => {
-			state.list = { ...state.list, ...action.payload }
-			console.log(state.list)
+			state.list = {
+				...state.list,
+				...action.payload,
+			}
 		},
 	},
 })

@@ -227,7 +227,7 @@ function JobFiltersList({}) {
 			/>
 
 			<FilterMultiSelect
-				isMultiple={false}
+				isMultiple={true}
 				setValues={values => {
 					dispatch(
 						setFilter({
@@ -257,7 +257,9 @@ function JobFiltersList({}) {
 				isMultiple={false}
 				placeholder="Min Base Pay"
 				selectedValues={
-					filters.minBasePayInLPA === null ? [] : [filters.minBasePayInLPA + ""]
+					filters.minBasePayInLPA === null
+						? []
+						: [filters.minBasePayInLPA + "L"]
 				}
 				values={minBasePayInLPAValues}
 				minCharacter={12}

@@ -53,9 +53,7 @@ function FilterMultiSelect({
 		setValues(selectedValues.filter(currValue => currValue !== value))
 	}
 	const valuesToShow = React.useMemo(() => {
-		return isMultiple
-			? values?.filter(v => !selectedValues.includes(v))
-			: values
+		return values?.filter(v => !selectedValues.includes(v))
 	}, [selectedValues, values])
 	const [open, setOpen] = useState(false)
 
