@@ -11,7 +11,7 @@ import LazyLoad from "react-lazy-load"
 
 interface JobPostingCardProps {
 	job: Job
-	// onJobCardVisible: () => void
+	onJobCardVisible: () => void
 }
 
 const capitalizeFirstLetter = (str: string) => {
@@ -20,7 +20,7 @@ const capitalizeFirstLetter = (str: string) => {
 
 const JobPostingCard: React.FC<JobPostingCardProps> = ({
 	job,
-	// onJobCardVisible,
+	onJobCardVisible,
 }) => {
 	const {
 		jobRole: title,
@@ -59,7 +59,14 @@ const JobPostingCard: React.FC<JobPostingCardProps> = ({
 				p: 2,
 			}}
 		>
-			<CardContent>
+			<CardContent
+				sx={{
+					display: "grid",
+					gridTemplateRows: "auto auto auto auto 1fr auto auto",
+					gridTemplateColumns: "fit-content",
+					height: showFullDescription ? "auto" : "650px",
+				}}
+			>
 				<Chip
 					label={`⏳ Posted ${postedDaysAgo} days ago`}
 					variant="outlined"
@@ -130,7 +137,15 @@ const JobPostingCard: React.FC<JobPostingCardProps> = ({
 				>
 					About Job:
 				</Typography>
-				<Typography variant="body1" paragraph sx={{ position: "relative" }}>
+				<Typography
+					variant="body1"
+					paragraph
+					sx={{
+						position: "relative",
+						overflowX: "hidden",
+						overflowY: "hidden",
+					}}
+				>
 					{description}
 					{!showFullDescription && (
 						<Button
@@ -200,24 +215,26 @@ const JobPostingCard: React.FC<JobPostingCardProps> = ({
 				>
 					{minExp} years
 				</Typography>
-				<Button
-					variant="contained"
-					sx={{
-						background: "#54EFC4",
-						color: "black",
-						width: "100%",
-						padding: "8px 18px",
-						fontSize: "18px",
-						fontWeight: "500",
-						borderRadius: "10px",
-						boxShadow: "none",
-						"&:hover": {
-							background: "#6cf5cc",
-						},
-					}}
-				>
-					⚡ Easy Apply
-				</Button>
+				<LazyLoad onContentVisible={onJobCardVisible}>
+					<Button
+						variant="contained"
+						sx={{
+							background: "#54EFC4",
+							color: "black",
+							width: "100%",
+							padding: "8px 18px",
+							fontSize: "18px",
+							fontWeight: "500",
+							borderRadius: "10px",
+							boxShadow: "none",
+							"&:hover": {
+								background: "#6cf5cc",
+							},
+						}}
+					>
+						⚡ Easy Apply
+					</Button>
+				</LazyLoad>
 			</CardContent>
 		</Card>
 	)
